@@ -1,0 +1,7 @@
+{
+  "name": "Dhanitra AI",
+  "description": "A personal finance dashboard with an AI assistant to help you manage your money, track spending, set goals, and get financial advice.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
