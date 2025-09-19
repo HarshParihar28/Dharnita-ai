@@ -4,6 +4,7 @@ export interface Account {
     name: string;
     type: 'Checking' | 'Savings' | 'Credit Card';
     balance: number;
+    currency: 'INR'; 
 }
 
 export interface Transaction {
@@ -14,6 +15,7 @@ export interface Transaction {
     category: 'Groceries' | 'Utilities' | 'Transport' | 'Entertainment' | 'Income' | 'Other';
     accountId: string;
     billId?: string;
+    currency?: 'INR'; 
 }
 
 export interface Bill {
@@ -21,7 +23,8 @@ export interface Bill {
     fileName: string;
     fileType: string;
     uploadDate: string;
-    fileUrl: string; // In a real app, this would be a Supabase storage URL
+    fileUrl: string;
+    currency?:'INR'; 
 }
 
 export interface Goal {
@@ -30,6 +33,7 @@ export interface Goal {
     targetAmount: number;
     currentAmount: number;
     deadline: string;
+    currency?: 'INR'; 
 }
 
 export interface Investment {

@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 import type { Account, Transaction, Goal, Investment, Todo, Bill } from '../types';
 import { MOCK_ACCOUNTS, MOCK_TRANSACTIONS, MOCK_GOALS, MOCK_INVESTMENTS, MOCK_TODOS, MOCK_BILLS } from '../data/mockData';
@@ -10,6 +9,10 @@ interface AppContextType {
     investments: Investment[];
     todos: Todo[];
     bills: Bill[];
+    isAuthenticated: boolean;
+    userName: string | null;
+    login: (email: string, password: string) => boolean;
+    logout: () => void;
     addTransaction: (transaction: Omit<Transaction, 'id' | 'date'>) => void;
     addGoal: (goal: Omit<Goal, 'id' | 'currentAmount'>) => void;
     addTodo: (task: string) => void;
@@ -29,6 +32,21 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
     const [todos, setTodos] = useState<Todo[]>(MOCK_TODOS);
     const [bills, setBills] = useState<Bill[]>(MOCK_BILLS);
 
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+    const login = (email: string, password: string): boolean => {
+        if (email === 'admin@gmail.com' && password === '1234') {
+            setIsAuthenticated(true);
+            return true;
+        }
+        return false;
+    };
+
+    const logout = () => {
+        setIsAuthenticated(false);
+
+    };
+
     const addTransaction = (transaction: Omit<Transaction, 'id' | 'date'>) => {
         const newTransaction: Transaction = {
             ...transaction,
@@ -36,14 +54,15 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
             date: new Date().toISOString().split('T')[0],
         };
         setTransactions(prev => [newTransaction, ...prev]);
-
-        setAccounts(prev => prev.map(acc => 
-            acc.id === newTransaction.accountId 
-            ? { ...acc, balance: acc.balance + newTransaction.amount } 
-            : acc
-        ));
+        setAccounts(prev =>
+            prev.map(acc =>
+                acc.id === newTransaction.accountId
+                    ? { ...acc, balance: acc.balance + newTransaction.amount }
+                    : acc
+            )
+        );
     };
-    
+
     const addGoal = (goal: Omit<Goal, 'id' | 'currentAmount'>) => {
         const newGoal: Goal = {
             ...goal,
@@ -62,30 +81,32 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
         };
         setTodos(prev => [newTodo, ...prev]);
     };
-    
+
     const toggleTodo = (id: string) => {
-        setTodos(prev => prev.map(todo => 
-            todo.id === id ? { ...todo, completed: !todo.completed } : todo
-        ));
+        setTodos(prev =>
+            prev.map(todo =>
+                todo.id === id ? { ...todo, completed: !todo.completed } : todo
+            )
+        );
     };
 
     const deleteTodo = (id: string) => {
         setTodos(prev => prev.filter(todo => todo.id !== id));
     };
 
-    const addBill = (bill: Omit<Bill, 'id'| 'uploadDate'>) => {
+    const addBill = (bill: Omit<Bill, 'id' | 'uploadDate'>) => {
         const newBill: Bill = {
             ...bill,
             id: `bill_${Date.now()}`,
-            uploadDate: new Date().toISOString().split('T')[0]
+            uploadDate: new Date().toISOString().split('T')[0],
         };
         setBills(prev => [newBill, ...prev]);
     };
 
     const linkBillToTransaction = (transactionId: string, billId: string) => {
-        setTransactions(prev => prev.map(t => 
-            t.id === transactionId ? { ...t, billId } : t
-        ));
+        setTransactions(prev =>
+            prev.map(t => (t.id === transactionId ? { ...t, billId } : t))
+        );
     };
 
     const value = {
@@ -95,6 +116,9 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
         investments,
         todos,
         bills,
+        isAuthenticated,
+        login,
+        logout,
         addTransaction,
         addGoal,
         addTodo,
@@ -109,8 +133,6 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
 
 export const useAppContext = () => {
     const context = useContext(AppContext);
-    if (context === undefined) {
-        throw new Error('useAppContext must be used within an AppContextProvider');
-    }
+    if (!context) throw new Error('useAppContext must be used within an AppContextProvider');
     return context;
 };

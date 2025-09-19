@@ -19,9 +19,20 @@ const GoalCard: React.FC<{ goal: Goal }> = ({ goal }) => {
             </div>
             <div className="mt-4">
                 <div className="flex justify-between text-sm font-medium text-gray-300 mb-1">
-                    <span>${goal.currentAmount.toLocaleString()}</span>
-                    <span className="text-gray-400">${goal.targetAmount.toLocaleString()}</span>
-                </div>
+    <span>
+        {goal.currentAmount.toLocaleString('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+        })}
+    </span>
+    <span className="text-gray-400">
+        {goal.targetAmount.toLocaleString('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+        })}
+    </span>
+</div>
+
                 <div className="w-full bg-gray-700 rounded-full h-2.5">
                     <div
                         className="bg-primary h-2.5 rounded-full"
@@ -46,6 +57,7 @@ const GoalsPage: React.FC = () => {
             </div>
         </div>
     );
+    
 };
 
 export default GoalsPage;

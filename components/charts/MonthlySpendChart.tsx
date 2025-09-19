@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
 import type { Transaction } from '../../types';
@@ -30,12 +29,24 @@ const MonthlySpendChart: React.FC<MonthlySpendChartProps> = ({ transactions }) =
         spend: value,
     }));
 
+    // Custom Y-axis ticks
+    const yTicks = [500, 1000, 1500, 2000, 3000, 5000];
+
     return (
         <ResponsiveContainer width="100%" height={300}>
             <BarChart data={chartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                 <XAxis dataKey="name" stroke="#9ca3af" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#9ca3af" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `$${value}`} />
+                <YAxis
+                    stroke="#9ca3af"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                    ticks={yTicks}
+                    tickFormatter={(value) =>
+                        value.toLocaleString('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 })
+                    }
+                />
                 <Tooltip
                     contentStyle={{
                         backgroundColor: '#1f2937',
@@ -43,8 +54,11 @@ const MonthlySpendChart: React.FC<MonthlySpendChartProps> = ({ transactions }) =
                         color: '#e5e7eb',
                     }}
                     cursor={{ fill: '#374151' }}
+                    formatter={(value: number) =>
+                        value.toLocaleString('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 })
+                    }
                 />
-                <Legend wrapperStyle={{fontSize: "14px"}}/>
+                <Legend wrapperStyle={{ fontSize: '14px' }} />
                 <Bar dataKey="spend" fill="#3b82f6" name="Spend" radius={[4, 4, 0, 0]} />
             </BarChart>
         </ResponsiveContainer>

@@ -11,7 +11,7 @@ const TransactionsPage: React.FC = () => {
     const [category, setCategory] = useState<Transaction['category']>('Other');
     const [accountId, setAccountId] = useState(accounts[0]?.id || '');
 
-    const suggestions = ["Salary", "Coffee shop", "Groceries", "Rent", "Internet Bill", "Shopping", "Transport", "Electricity bill", "Institution fees", "additioal spent", "Bills", "Cloths", "Stocks", ];
+    const suggestions = ["Salary", "Coffee shop", "Groceries", "Rent", "Internet Bill", "Shopping", "Transport", "Electricity bill", "Institution fees", "additioal spent", "Bills", "Cloths", "Stocks"];
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -119,7 +119,7 @@ const TransactionsPage: React.FC = () => {
                                     <td className="p-4 text-gray-300">{tx.category}</td>
                                     <td className="p-4 text-gray-300">{getAccountName(tx.accountId)}</td>
                                     <td className={`p-4 font-semibold text-right ${tx.amount > 0 ? 'text-secondary' : 'text-gray-200'}`}>
-                                        {tx.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+                                        {tx.amount.toLocaleString('en-US', { style: 'currency', currency: 'INR' })}
                                     </td>
                                 </tr>
                             ))}

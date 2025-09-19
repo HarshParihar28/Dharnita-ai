@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import type { Transaction } from '../../types';
@@ -39,6 +38,14 @@ const ProfitLossChart: React.FC<ProfitLossChartProps> = ({ transactions }) => {
 
     const chartData = processData();
 
+    const formatCurrency = (value: number) =>
+        value.toLocaleString('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        });
+
     return (
         <ResponsiveContainer width="100%" height={300}>
             <AreaChart data={chartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
@@ -54,8 +61,16 @@ const ProfitLossChart: React.FC<ProfitLossChartProps> = ({ transactions }) => {
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                 <XAxis dataKey="name" stroke="#9ca3af" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#9ca3af" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `$${value/1000}k`} />
+                <YAxis
+                    stroke="#9ca3af"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                    ticks={[500, 1000, 1500, 2000, 3000, 5000]} // ✅ Fixed ticks
+                    tickFormatter={(value) => formatCurrency(value)}
+                />
                 <Tooltip
+                    formatter={(value: number) => formatCurrency(value)}
                     contentStyle={{
                         backgroundColor: '#1f2937',
                         borderColor: '#374151',

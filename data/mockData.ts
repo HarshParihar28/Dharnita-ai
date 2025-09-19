@@ -2,9 +2,9 @@
 import type { Account, Transaction, Goal, Investment, Todo, Bill } from '../types';
 
 export const MOCK_ACCOUNTS: Account[] = [
-    { id: 'acc_1', name: 'Main Checking', type: 'Checking', balance: 5210.55 },
-    { id: 'acc_2', name: 'High-Yield Savings', type: 'Savings', balance: 25400.00 },
-    { id: 'acc_3', name: 'Travel Rewards Card', type: 'Credit Card', balance: -850.21 },
+    { id: 'acc_1', name: 'Main Checking', type: 'Checking', balance: 15210.55, currency: 'INR' },
+    { id: 'acc_2', name: 'High-Yield Savings', type: 'Savings', balance: 25400.00, currency: 'INR'},
+    { id: 'acc_3', name: 'Travel Rewards Card', type: 'Credit Card', balance: -850.21, currency: 'INR' },
 ];
 
 export const MOCK_TRANSACTIONS: Transaction[] = [
