@@ -1,6 +1,15 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { LayoutDashboard, ArrowLeftRight, FileText, Target, Briefcase, ListTodo, BotMessageSquare } from 'lucide-react';
+import { 
+    LayoutDashboard, 
+    ArrowLeftRight, 
+    FileText, 
+    Target, 
+    Briefcase, 
+    ListTodo, 
+    BotMessageSquare,
+    Diamond
+} from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 
 interface NavItemProps {
@@ -34,6 +43,7 @@ const Layout: React.FC = () => {
         { to: '/investments', icon: <Briefcase size={20} />, label: 'Investments' },
         { to: '/todo', icon: <ListTodo size={20} />, label: 'To-Do List' },
         { to: '/chat', icon: <BotMessageSquare size={20} />, label: 'AI Assistant' },
+        { to: '/metals', icon: <Diamond size={20} />, label: 'Metals' },
     ];
 
     return (

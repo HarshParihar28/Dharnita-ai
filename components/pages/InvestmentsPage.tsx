@@ -1,18 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppContext } from '../../context/AppContext';
 import Card from '../ui/Card';
-import { TrendingUp, TrendingDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { TrendingUp, TrendingDown, ArrowUp, ArrowDown, Plus } from 'lucide-react';
 
 const InvestmentsPage: React.FC = () => {
-    const { investments } = useAppContext();
+    const { investments, addInvestment } = useAppContext();
+    const [newInv, setNewInv] = useState({ symbol: '', name: '', quantity: 0, avgPrice: 0, currentPrice: 0 });
 
-    const totalValue = investments.reduce((acc, inv) => acc + (inv.quantity * inv.currentPrice), 0);
-    const totalCost = investments.reduce((acc, inv) => acc + (inv.quantity * inv.avgPrice), 0);
+    const handleAddInvestment = () => {
+        if (!newInv.symbol || !newInv.name || newInv.quantity <= 0) return;
+
+        addInvestment({
+            symbol: newInv.symbol,
+            name: newInv.name,
+            quantity: newInv.quantity,
+            avgPrice: newInv.avgPrice,
+            currentPrice: newInv.currentPrice,
+        });
+
+        setNewInv({ symbol: '', name: '', quantity: 0, avgPrice: 0, currentPrice: 0 });
+    };
+
+    const totalValue = investments.reduce((acc, inv) => acc + inv.quantity * inv.currentPrice, 0);
+    const totalCost = investments.reduce((acc, inv) => acc + inv.quantity * inv.avgPrice, 0);
     const totalGainLoss = totalValue - totalCost;
     const totalGainLossPercent = (totalGainLoss / totalCost) * 100;
     const isGain = totalGainLoss >= 0;
 
-    // helper to format as INR
     const formatINR = (value: number) =>
         value.toLocaleString('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 2 });
 
@@ -20,6 +34,68 @@ const InvestmentsPage: React.FC = () => {
         <div className="space-y-8">
             <h2 className="text-3xl font-bold text-white">Investment Portfolio</h2>
 
+            {/* Add Investment Form */}
+            <Card>
+                <h3 className="text-xl font-semibold text-white mb-4">Add New Investment</h3>
+                <div className="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
+                    <div className="flex flex-col">
+                        <label className="text-gray-400 text-sm mb-1">Symbol</label>
+                        <input
+                            className="p-2 rounded-lg bg-gray-800 text-white focus:ring-2 focus:ring-green-500"
+                            placeholder="TCS"
+                            value={newInv.symbol}
+                            onChange={(e) => setNewInv({ ...newInv, symbol: e.target.value })}
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="text-gray-400 text-sm mb-1">Name</label>
+                        <input
+                            className="p-2 rounded-lg bg-gray-800 text-white focus:ring-2 focus:ring-green-500"
+                            placeholder="Tata Consultancy Services"
+                            value={newInv.name}
+                            onChange={(e) => setNewInv({ ...newInv, name: e.target.value })}
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="text-gray-400 text-sm mb-1">Quantity</label>
+                        <input
+                            type="number"
+                            className="p-2 rounded-lg bg-gray-800 text-white focus:ring-2 focus:ring-green-500"
+                            placeholder="10"
+                            value={newInv.quantity}
+                            onChange={(e) => setNewInv({ ...newInv, quantity: Number(e.target.value) })}
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="text-gray-400 text-sm mb-1">Avg Price</label>
+                        <input
+                            type="number"
+                            className="p-2 rounded-lg bg-gray-800 text-white focus:ring-2 focus:ring-green-500"
+                            placeholder="150.75"
+                            value={newInv.avgPrice}
+                            onChange={(e) => setNewInv({ ...newInv, avgPrice: Number(e.target.value) })}
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="text-gray-400 text-sm mb-1">Current Price</label>
+                        <input
+                            type="number"
+                            className="p-2 rounded-lg bg-gray-800 text-white focus:ring-2 focus:ring-green-500"
+                            placeholder="3045.50"
+                            value={newInv.currentPrice}
+                            onChange={(e) => setNewInv({ ...newInv, currentPrice: Number(e.target.value) })}
+                        />
+                    </div>
+                    <button
+                        onClick={handleAddInvestment}
+                        className="flex items-center justify-center gap-2 bg-green-600 px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                    >
+                        <Plus size={16} /> Add Investment
+                    </button>
+                </div>
+            </Card>
+
+            {/* Portfolio Summary */}
             <Card>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                     <div>
@@ -46,6 +122,7 @@ const InvestmentsPage: React.FC = () => {
                 </div>
             </Card>
 
+            {/* Investments Table */}
             <Card>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
@@ -62,7 +139,7 @@ const InvestmentsPage: React.FC = () => {
                         <tbody>
                             {investments.map((inv) => {
                                 const marketValue = inv.quantity * inv.currentPrice;
-                                const gainLoss = marketValue - (inv.quantity * inv.avgPrice);
+                                const gainLoss = marketValue - inv.quantity * inv.avgPrice;
                                 const isInvGain = gainLoss >= 0;
                                 return (
                                     <tr key={inv.id} className="border-b border-gray-700 last:border-b-0 hover:bg-gray-700/50">

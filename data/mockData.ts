@@ -41,5 +41,5 @@ export const MOCK_INVESTMENTS: Investment[] = [
 export const MOCK_TODOS: Todo[] = [
     { id: 'todo_1', task: 'Save 2000 this month', completed: false, createdAt: '2025-09-22T10:00:00Z' },
     { id: 'todo_2', task: 'Review monthly budget', completed: false, createdAt: '2025-10-21T11:00:00Z' },
-    { id: 'todo_3', task: 'Invest in TCS', completed: true, createdAt: '2024-07-20T12:00:00Z' },
+    { id: 'todo_3', task: 'Invest in TCS', completed: false, createdAt: '2024-07-20T12:00:00Z' },
 ];

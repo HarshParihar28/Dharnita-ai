@@ -10,8 +10,8 @@ import InvestmentsPage from './components/pages/InvestmentsPage';
 import TodoPage from './components/pages/TodoPage';
 import ChatPage from './components/pages/ChatPage';
 import BillsPage from './components/pages/BillsPage';
+import MetalsPage from './components/pages/MetalsPage';
 
-// Protected Route
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { isAuthenticated } = useAppContext();
     return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
@@ -38,6 +38,7 @@ const App: React.FC = () => (
                     <Route path="todo" element={<TodoPage />} />
                     <Route path="chat" element={<ChatPage />} />
                     <Route path="bills" element={<BillsPage />} />
+                    <Route path="metals" element={<MetalsPage />} />
                     <Route path="" element={<Navigate to="dashboard" replace />} />
                 </Route>
 

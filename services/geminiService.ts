@@ -9,6 +9,7 @@ if (!API_KEY) {
 
 const ai = new GoogleGenAI({ apiKey: API_KEY });
 
+
 interface FinancialContext {
   accounts: Account[];
   transactions: Transaction[];

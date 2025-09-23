@@ -35,7 +35,7 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
     const [isAuthenticated, setIsAuthenticated] = useState(false)
 
     const login = (email: string, password: string): boolean => {
-        if (email === 'admin@gmail.com' && password === '1234') {
+        if (email === 'a@gmail.com' && password === '1234') {
             setIsAuthenticated(true);
             return true;
         }
