@@ -37,6 +37,7 @@ const Layout: React.FC = () => {
 
     const navItems: NavItemProps[] = [
         { to: '/dashboard', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
+        { to: '/loan', icon: <Diamond size={20} />, label: 'Loan' },
         { to: '/transactions', icon: <ArrowLeftRight size={20} />, label: 'Transactions' },
         { to: '/bills', icon: <FileText size={20} />, label: 'Bills' },
         { to: '/goals', icon: <Target size={20} />, label: 'Goals' },
@@ -44,7 +45,7 @@ const Layout: React.FC = () => {
         { to: '/todo', icon: <ListTodo size={20} />, label: 'To-Do List' },
         { to: '/chat', icon: <BotMessageSquare size={20} />, label: 'AI Assistant' },
         { to: '/metals', icon: <Diamond size={20} />, label: 'Jewel' },
-        { to: '/loan', icon: <Diamond size={20} />, label: 'Loan' },
+        
     ];
 
     return (

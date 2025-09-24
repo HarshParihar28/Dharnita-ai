@@ -14,7 +14,7 @@ const LoanPage: React.FC = () => {
   const [showIdModal, setShowIdModal] = useState(false);
   const [applicationId, setApplicationId] = useState("");
 
-  // Monthly income & expenses
+  // Financial calculations
   const monthlyIncome = MOCK_TRANSACTIONS.filter(
     (t) => t.category === "Income"
   ).reduce((sum, t) => sum + t.amount, 0);
@@ -41,13 +41,24 @@ const LoanPage: React.FC = () => {
   const creditScore = 782;
   const creditPercent = (creditScore / 900) * 100;
 
-  // EMI calculation
-  const calculateEMI = (amount: number, rate: number, years: number) => {
-    const monthlyRate = rate / 12 / 100;
-    const months = years * 12;
-    if (monthlyRate === 0) return (amount / months).toFixed(2);
-    const emi = (amount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -months));
-    return emi.toFixed(2);
+  // Correct EMI calculation using the formula: EMI = [P x R x (1+R)^N] / [(1+R)^N - 1]
+  const calculateEMI = (principal: number, annualRate: number, years: number) => {
+    const N = years * 12; // Total number of months
+    const R = annualRate / 12 / 100; // Monthly interest rate
+
+    if (R === 0) {
+      const emi = principal / N;
+      return { emi, totalPayable: principal, totalInterest: 0 };
+    }
+
+    const numerator = principal * R * Math.pow(1 + R, N);
+    const denominator = Math.pow(1 + R, N) - 1;
+    const emi = numerator / denominator;
+
+    const totalPayable = emi * N;
+    const totalInterest = totalPayable - principal;
+
+    return { emi, totalPayable, totalInterest };
   };
 
   const generateApplicationId = () => {
@@ -123,6 +134,7 @@ const LoanPage: React.FC = () => {
         </div>
       </Card>
 
+      {/* Loan Application Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <Card className="w-full max-w-lg p-6 space-y-4 relative">
@@ -180,18 +192,21 @@ const LoanPage: React.FC = () => {
                 step={0.1}
               />
 
-              {loanAmount > 0 && tenureYears > 0 && (
-                <>
-                  <p className="text-gray-300">
-                    Monthly Payable Amount: ₹
-                    {calculateEMI(loanAmount, interestRate, tenureYears)}
-                  </p>
-                  <p className="text-gray-300 font-semibold mt-1">
-                    Total Payable Amount: ₹
-                    {(Number(calculateEMI(loanAmount, interestRate, tenureYears)) * tenureYears * 12).toFixed(2)}
-                  </p>
-                </>
-              )}
+              {/* Display EMI, Total Interest, Total Payable */}
+              {loanAmount > 0 && tenureYears > 0 && (() => {
+                const { emi, totalPayable, totalInterest } = calculateEMI(
+                  loanAmount,
+                  interestRate,
+                  tenureYears
+                );
+                return (
+                  <>
+                    <p className="text-gray-300">Monthly EMI: ₹{emi.toFixed(2)}</p>
+                    <p className="text-gray-300">Total Interest Payable: ₹{totalInterest.toFixed(2)}</p>
+                    <p className="text-gray-300 font-semibold mt-1">Total Amount Payable: ₹{totalPayable.toFixed(2)}</p>
+                  </>
+                );
+              })()}
 
               <Button
                 className="w-full bg-green-600 hover:bg-green-700"
