@@ -43,7 +43,8 @@ const Layout: React.FC = () => {
         { to: '/investments', icon: <Briefcase size={20} />, label: 'Investments' },
         { to: '/todo', icon: <ListTodo size={20} />, label: 'To-Do List' },
         { to: '/chat', icon: <BotMessageSquare size={20} />, label: 'AI Assistant' },
-        { to: '/metals', icon: <Diamond size={20} />, label: 'Metals' },
+        { to: '/metals', icon: <Diamond size={20} />, label: 'Jewel' },
+        { to: '/loan', icon: <Diamond size={20} />, label: 'Loan' },
     ];
 
     return (
